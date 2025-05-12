@@ -25,6 +25,7 @@ Route::post('/AddUser', [UserController::class, 'AddUsers'])->name('UserId.add')
 Route::get('/EditUser/{id}', [UserController::class, 'ShowEditUsers'])->name('UserId.edit');
 Route::post('/EditUser/{id}', [UserController::class, 'EditUsers'])->name('UserId.update');
 Route::get('/DeleteUser/{id}', [UserController::class, 'DeleteUser'])->name('UserId.delete');
+Route::get('/Register', function(){return Inertia::render('Register');});
 
 Route::get('/SearchUser', [UserController::class, 'SearchUser']);
 Route::get('/Users/Filter{category}', [UserController::class, 'filter']);

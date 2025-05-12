@@ -47,7 +47,7 @@ class UserController extends Controller
 
 
     public function ShowEditUsers($id) {
-        $users = User::where('id', '=', $id)->get();
+        $users = User::where('id', $id)->get();
         return Inertia::render('EditUser', [
             "users" => $users
         ]);
@@ -78,7 +78,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return Redirect::to('/Users')->with('success', 'Usuario eliminado correctamente');
+        return Redirect::to('/Users');
     }
 
     public function SearchUser(Request $request) {

@@ -12,13 +12,11 @@ const category = ref();
 
 category.value = "Name"; //Posar el valor Totes Les Pàgines default
 
-var users = ref();
-
-users.value = props.pages; //Agafar valor de les pàgines
+const filteredUsers = ref(props.users);
 
 const filter = () => {
     axios.get('/Users/Filter'+category.value).then((response) => {
-       users.value = response.data; //Canviar totes les pàgines per les seleccionables
+      filteredUsers.value = response.data; //Canviar totes les pàgines per les seleccionables
     });
 };
 
@@ -28,18 +26,29 @@ const submitSearch = () => {
       search: search.value
     }
   }).then((response)=>{
-    users.value = response.data
-    console.log(users)
+    filteredUsers.value = response.data
+    console.log(filteredUsers)
   });
 }
 
 const search = ref();
 
-users = ref(props.users);
+console.log(filteredUsers);
 
 // const navigateToEdit = (userId) => {
 //     window.location.href = route('UserId.edit', userId);
 // };
+
+const cookiesAccepted = ref(false);
+
+if (localStorage.getItem("cookies") === "true") {
+    cookiesAccepted.value = true;
+}
+
+const acceptCookies = () => {
+    cookiesAccepted.value = true;
+    localStorage.setItem("cookies", "true");
+}
 </script>
 
 <template>
@@ -74,7 +83,7 @@ users = ref(props.users);
               <th class="w-1/5 rounded-r-lg px-6 py-5 text-sm font-semibold text-white uppercase tracking-wider">
               </th>
             </tr>
-            <tr v-for="user in users" class="bg-blue-100 text-center p-y-4 rounded-3xl">
+            <tr v-for="user in filteredUsers" class="bg-blue-100 text-center p-y-4 rounded-3xl">
               <td class="w-1/5 rounded-l-lg py-2">{{ user.name }}</td>
               <td class="py-3 px-4 border-b border-blue-100">{{ user.surname }}</td>
               <td class="w-1/5 py-2">{{ user.email }}</td>
@@ -89,4 +98,14 @@ users = ref(props.users);
       </div>
     </div>
   </div>
+  <div v-if="!cookiesAccepted" class="bg-black/80 absolute min-w-full min-h-full z-40 start-0 top-0 flex justify-center items-center">
+        <div class="w-1/2 min-h-[180px] bg-blue-200 border-b-4 rounded-lg shadow-md border-b-blue-800 p-4">
+            <h2 class="text-blue-800 text-4xl font-extrabold">Avís de cookies</h2>
+            <br>
+            <p>Aquest és un avís de cookies</p>
+            <div class="inline-flex justify-end w-full">
+                <Button @click="acceptCookies">Ok</Button>
+            </div>
+        </div>
+    </div>
 </template>
